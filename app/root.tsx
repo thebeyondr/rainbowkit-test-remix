@@ -56,7 +56,10 @@ export default function App() {
       },
     ],
     transports: {
-      [sepolia.id]: http(),
+      // TODO: Handle client side ENV variables in Remix
+      [sepolia.id]: http(
+        `https://sepolia.infura.io/v3/${process.env.INFURA_ID}`
+      ),
     },
   });
 
