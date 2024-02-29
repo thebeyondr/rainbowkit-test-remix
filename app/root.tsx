@@ -1,9 +1,11 @@
 import {
+  json,
   Links,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  useLoaderData,
 } from "@remix-run/react";
 
 import "@rainbow-me/rainbowkit/styles.css";
@@ -22,6 +24,14 @@ import {
   rainbowWallet,
   zerionWallet,
 } from "@rainbow-me/rainbowkit/wallets";
+
+export async function loader() {
+  return json({
+    ENV: {
+      INFURA_ID: process.env.INFURA_ID,
+    },
+  });
+}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -43,7 +53,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
 const queryClient = new QueryClient();
 
+type LoaderData = {
+  ENV: {
+    INFURA_ID: string;
+  };
+};
+
 export default function App() {
+  const { ENV } = useLoaderData<LoaderData>();
+
   const config = getDefaultConfig({
     ssr: true,
     appName: "RainbowKit Remix Example",
@@ -56,10 +74,7 @@ export default function App() {
       },
     ],
     transports: {
-      // TODO: Handle client side ENV variables in Remix
-      [sepolia.id]: http(
-        `https://sepolia.infura.io/v3/${process.env.INFURA_ID}`
-      ),
+      [sepolia.id]: http(`https://sepolia.infura.io/v3/${ENV.INFURA_ID}`),
     },
   });
 
@@ -77,6 +92,11 @@ export default function App() {
             <ConnectButton />
           </div>
         </RainbowKitProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.ENV = ${JSON.stringify(ENV)}`,
+          }}
+        />
         <Outlet />
       </QueryClientProvider>
     </WagmiProvider>
