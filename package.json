@@ -11,12 +11,16 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@rainbow-me/rainbowkit": "^2.0.1",
     "@remix-run/node": "^2.8.0",
     "@remix-run/react": "^2.8.0",
     "@remix-run/serve": "^2.8.0",
+    "@tanstack/react-query": "^5.24.1",
     "isbot": "^4.1.0",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "viem": "2.x",
+    "wagmi": "^2.5.7"
   },
   "devDependencies": {
     "@remix-run/dev": "^2.8.0",
